@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Function to get the maximum value in the array
+int getMax(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++)
+        if (arr[i] > max)
+            max = arr[i];
+    return max;
+}
+
+// Counting sort based on the digit represented by exp
+void countingSort(int arr[], int n, int exp) {
+    int *output = (int *)malloc(n * sizeof(int)); // Output array
+    int count[10] = {0}; // Count array to store occurrences
+
+    // Count occurrences of each digit
+    for (int i = 0; i < n; i++)
+        count[(arr[i] / exp) % 10]++;
+
+    // Update count[i] to hold the actual position
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    // Build the output array
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        count[(arr[i] / exp) % 10]--;
+    }
+
+    // Copy the output array back to the input array
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
+
+    free(output); // Free allocated memory
+}
+
+// Radix Sort function
+void radixSort(int arr[], int n) {
+    int max = getMax(arr, n); // Get the maximum value in the array
+
+    // Perform counting sort for each digit
+    for (int exp = 1; max / exp > 0; exp *= 10)
+        countingSort(arr, n, exp);
+}
+
+// Function to print the array
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+
+int main() {
+    int x;
+    printf("Enter the numbers of elements in th array: ");
+    scanf("%d",&x);
+    printf("Now, enter the elements of the array:\n");
+    int arr[x];
+    for(int i=0;i<x;i++)
+    {
+     scanf("%d",&arr[i]);
+    }
+    
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Original array:\n");
+    printArray(arr, n);
+
+    radixSort(arr, n);
+
+    printf("Sorted array:\n");
+    printArray(arr, n);
+
+    return 0;
+}
