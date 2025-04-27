@@ -55,7 +55,7 @@ int main()
  {
   cin>>w>>cost;
 
-  items.push_back({w,cost,(float(cost)/float(w))});
+  items.push_back({w,cost,(cost/w)});
  }
  float maxProfit=fractionalKnapsack(items,W);
  cout<<"The maximum profit is "<<maxProfit<<endl;
